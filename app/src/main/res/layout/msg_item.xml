@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout   xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/msg_pic"
+        >
+    </ImageView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/msg_title"
+        android:text="国庆长假健康攻略！"
+        android:textSize="25dp"
+        android:textColor="@android:color/black"
+        android:layout_toRightOf="@+id/msg_pic"
+        android:layout_margin="3dp"
+        ></TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/msg_content"
+        android:text="国庆长假健康攻略！人手必备 假期虽难得，但饮食、出行、补觉都要注重身体健康。小编这就给大家支几招，只要稍加注意，假期都可以变得健康又完美！ 饮食篇： 减盐油、少热量 不宜过"
+        android:textSize="15dp"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:layout_below="@+id/msg_title"
+        android:layout_toRightOf="@+id/msg_pic"
+        android:layout_margin="3dp"
+        ></TextView>
+</RelativeLayout>

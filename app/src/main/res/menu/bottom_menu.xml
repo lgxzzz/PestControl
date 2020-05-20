@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/bottom_menu_info"
+        android:icon="@drawable/info"
+        android:title="病害信息"
+        />
+    <item android:id="@+id/bottom_menu_decode"
+        android:icon="@drawable/shibie"
+        android:title="图片诊断"
+        />
+    <item android:id="@+id/bottom_menu_search"
+        android:icon="@drawable/bingchonghai"
+        android:title="病虫信息"
+        />
+</menu>

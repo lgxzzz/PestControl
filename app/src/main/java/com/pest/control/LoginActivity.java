@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.store.selection.data.DBManger;
+import com.pest.control.data.DBManger;
 
 
 public class LoginActivity extends Activity implements View.OnClickListener{

@@ -14,8 +14,8 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
-import com.store.selection.bean.User;
-import com.store.selection.data.DBManger;
+import com.pest.control.bean.User;
+import com.pest.control.data.DBManger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,6 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mRepeatPassWordEd;
     private EditText mTelEd;
     private EditText mMailEd;
-    private Spinner mRoleSp;
     private Button mRegBtn;
     private String mSelectRole="";
     private User mUser;
@@ -51,27 +50,6 @@ public class RegisterActivity extends AppCompatActivity {
         mTelEd = findViewById(R.id.reg_phone_ed);
         mMailEd = findViewById(R.id.reg_mail_ed);
         mRegBtn = findViewById(R.id.reg_btn);
-        mRoleSp = findViewById(R.id.user_role);
-
-        final List<String> mRoles =new ArrayList<>();
-        mRoles.add("普通用户");
-        mRoles.add("管理员");
-
-        SpinnerAdapter adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,mRoles);
-        mRoleSp.setAdapter(adapter);
-        mSelectRole = mRoles.get(0);
-
-        mRoleSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mSelectRole = mRoles.get(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         mNameEd.addTextChangedListener(new TextWatcher() {
             @Override
@@ -142,22 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
-        mMailEd.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mUser.setMail(editable.toString());
-            }
-        });
 
         mRegBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,12 +141,10 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this,"两次密码不一致！", Toast.LENGTH_LONG).show();
                     return;
                 }
-                mUser.setRole(mSelectRole);
                 DBManger.getInstance(RegisterActivity.this).registerUser(mUser, new DBManger.IListener() {
                     @Override
                     public void onSuccess() {
                         User user = DBManger.getInstance(getBaseContext()).mUser;
-                        Toast.makeText(RegisterActivity.this,"注册成功,当前身份："+user.getRole(), Toast.LENGTH_LONG).show();
                         startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                     }
 
