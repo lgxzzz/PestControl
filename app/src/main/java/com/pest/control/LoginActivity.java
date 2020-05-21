@@ -2,16 +2,21 @@ package com.pest.control;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pest.control.data.DBManger;
+import com.pest.control.util.CodeUtils;
 
 
 public class LoginActivity extends Activity implements View.OnClickListener{
@@ -22,6 +27,10 @@ public class LoginActivity extends Activity implements View.OnClickListener{
     private String mName;
     private String mPassWord;
     private Button mLoginBtn;
+    private ImageView mPicCodeImg;
+    private EditText mPicCodeEd;
+
+    private CodeUtils codeUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +83,18 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                mPassWord = editable.toString();
             }
         });
+
+        mPicCodeImg = findViewById(R.id.pic_code_img);
+
+        mPicCodeEd = findViewById(R.id.pic_code_ed);
+        getCode();
+    }
+
+    //获取验证码
+    private void getCode() {
+        codeUtils = CodeUtils.getInstance();
+        Bitmap bitmap = codeUtils.createBitmap();
+        mPicCodeImg.setImageBitmap(bitmap);
     }
 
     @Override
@@ -83,6 +104,18 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                 break;
             case R.id.reg_login_btn:
+                String codeStr = mPicCodeEd.getText().toString().trim();
+                if (null == codeStr || TextUtils.isEmpty(codeStr)) {
+                    Toast.makeText(LoginActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String code = codeUtils.getCode();
+                if (code.equalsIgnoreCase(codeStr)) {
+                    Toast.makeText(LoginActivity.this, "验证码正确", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
+                    getCode();
+                }
                 DBManger.getInstance(LoginActivity.this).login(mName, mPassWord, new DBManger.IListener() {
                     @Override
                     public void onSuccess() {

@@ -5,15 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.pest.control.bean.Pest;
+import com.pest.control.bean.TreeLesion;
 import com.pest.control.bean.User;
 import com.pest.control.util.SharedPreferenceUtil;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class DBManger {
     private Context mContext;
@@ -183,10 +182,108 @@ public class DBManger {
         return mUsers;
     }
 
+    //添加树木病害
+    public void insertTreeLesion(TreeLesion lesion){
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("TREELESION_ID",lesion.getTREELESION_ID());
+            values.put("TREELESION_TYPE",lesion.getTREELESION_TYPE());
+            values.put("TREELESION_CONTEX",lesion.getTREELESION_CONTEX());
+            values.put("TREELESION_URL",lesion.getTREELESION_URL());
+            values.put("TREELESION_PIC_ID",lesion.getTREELESION_PIC_ID()+"");
+            long code = db.insert(SQLiteDbHelper.TAB_TREELESION,null,values);
+            db.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
+    //根据条件查询树木病害信息
+    public List<TreeLesion> getTreeLesionsByKey(String key){
+        List<TreeLesion> mTreeLesionInfoList = new ArrayList<>();
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM TreeLesions WHERE PEST_TYPE LIKE '%" + key + "%'", null);
+            while (cursor.moveToNext()){
+                String PEST_ID = cursor.getString(cursor.getColumnIndex("PEST_ID"));
+                String PEST_TYPE = cursor.getString(cursor.getColumnIndex("PEST_TYPE"));
+                String PEST_CONTEX = cursor.getString(cursor.getColumnIndex("PEST_CONTEX"));
+                String PEST_URL = cursor.getString(cursor.getColumnIndex("PEST_URL"));
+                String PEST_PIC_ID = cursor.getString(cursor.getColumnIndex("PEST_PIC_ID"));
+
+                TreeLesion treeLesion = new TreeLesion();
+                treeLesion.setTREELESION_ID(PEST_ID);
+                treeLesion.setTREELESION_TYPE(PEST_TYPE);
+                treeLesion.setTREELESION_CONTEX(PEST_CONTEX);
+                treeLesion.setTREELESION_PIC_ID(Integer.parseInt(PEST_PIC_ID));
+                treeLesion.setTREELESION_URL(PEST_URL);
+
+                mTreeLesionInfoList.add(treeLesion);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return mTreeLesionInfoList;
+    }
+
+    //根据条件查询害虫信息
+    public List<Pest> getPestsByKey(String key){
+        List<Pest> mPestsInfoList = new ArrayList<>();
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM Pest WHERE PEST_TYPE LIKE '%" + key + "%'", null);
+            while (cursor.moveToNext()){
+                String PEST_ID = cursor.getString(cursor.getColumnIndex("PEST_ID"));
+                String PEST_TYPE = cursor.getString(cursor.getColumnIndex("PEST_TYPE"));
+                String PEST_CONTEX = cursor.getString(cursor.getColumnIndex("PEST_CONTEX"));
+                String PEST_URL = cursor.getString(cursor.getColumnIndex("PEST_URL"));
+                String PEST_PIC_ID = cursor.getString(cursor.getColumnIndex("PEST_PIC_ID"));
+
+                Pest pest = new Pest();
+                pest.setPEST_ID(PEST_ID);
+                pest.setPEST_TYPE(PEST_TYPE);
+                pest.setPEST_CONTEX(PEST_CONTEX);
+                pest.setPEST_PIC_ID(Integer.parseInt(PEST_PIC_ID));
+                pest.setPEST_URL(PEST_URL);
+
+                mPestsInfoList.add(pest);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return mPestsInfoList;
+    }
+
+    //添加害虫
+    public void insertPest(Pest pest){
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("PEST_ID",pest.getPEST_ID());
+            values.put("PEST_TYPE",pest.getPEST_TYPE());
+            values.put("PEST_CONTEX",pest.getPEST_CONTEX());
+            values.put("PEST_URL",pest.getPEST_URL());
+            values.put("PEST_PIC_ID",pest.getPEST_PIC_ID()+"");
+            long code = db.insert(SQLiteDbHelper.TAB_PEST,null,values);
+            db.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public void initDefaultData(){
+        List<TreeLesion> mTreeLesionInfoList = mDataBase.mTreeLesionInfoList;
+        for (int i =0;i<mTreeLesionInfoList.size();i++){
+            TreeLesion treeLesion = new TreeLesion();
+            insertTreeLesion(treeLesion);
+        }
 
+        List<Pest> mPestInfoList = mDataBase.mPestInfoList;
+        for (int i =0;i<mPestInfoList.size();i++){
+            Pest pest = new Pest();
+            insertPest(pest);
+        }
     }
 
     public interface IListener{

@@ -26,12 +26,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/info_search_ed"
+            android:id="@+id/pest_search_ed"
             />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/info_search_clear_btn"
+            android:id="@+id/pest_search_clear_btn"
             android:text="清空"
             android:layout_margin="3dp"
             ></Button>

@@ -1,7 +1,8 @@
 package com.pest.control.data;
 
 import com.pest.control.R;
-import com.pest.control.bean.MsgInfo;
+import com.pest.control.bean.Pest;
+import com.pest.control.bean.TreeLesion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,26 +101,46 @@ public class DataBase {
     };
 
 
-    public List<MsgInfo> mMsgInfoList = new ArrayList<>();
-    public List<MsgInfo> mPestInfoList = new ArrayList<>();
+    public List<TreeLesion> mTreeLesionInfoList = new ArrayList<>();
+    public List<Pest> mPestInfoList = new ArrayList<>();
 
     public DataBase(){
         for (int i=0;i<TreeLesionsType.length;i++){
-            MsgInfo info = new MsgInfo();
-            info.setTitle(TreeLesionsType[i]);
-            info.setContent(TreeLesionsContext[i]);
-            info.setmPicId(DEFAULT_PIC[i]);
-            info.setUrl(DEFAULT_URL[i]);
-            mMsgInfoList.add(info);
+            TreeLesion treeLesion = new TreeLesion();
+            treeLesion.setTREELESION_ID(getRandomTree_ID());
+            treeLesion.setTREELESION_TYPE(TreeLesionsType[i]);
+            treeLesion.setTREELESION_CONTEX(TreeLesionsContext[i]);
+            treeLesion.setTREELESION_PIC_ID(DEFAULT_PIC[i]);
+            treeLesion.setTREELESION_URL(DEFAULT_URL[i]);
+            mTreeLesionInfoList.add(treeLesion);
         }
 
         for (int i=0;i<PestType.length;i++){
-            MsgInfo info = new MsgInfo();
-            info.setTitle(PestType[i]);
-            info.setContent(PestContext[i]);
-            info.setmPicId(PEST_DEFAULT_PIC[i]);
-            info.setUrl(PEST_DEFAULT_URL[i]);
-            mPestInfoList.add(info);
+            Pest pest = new Pest();
+            pest.setPEST_ID(getRandomPest_ID());
+            pest.setPEST_TYPE(PestType[i]);
+            pest.setPEST_CONTEX(PestContext[i]);
+            pest.setPEST_PIC_ID(PEST_DEFAULT_PIC[i]);
+            pest.setPEST_URL(PEST_DEFAULT_URL[i]);
+            mPestInfoList.add(pest);
         }
+    }
+
+    //生成树木id
+    public static String getRandomTree_ID(){
+        String strRand="T" ;
+        for(int i=0;i<10;i++){
+            strRand += String.valueOf((int)(Math.random() * 10)) ;
+        }
+        return strRand;
+    }
+
+    //生成害虫id
+    public static String getRandomPest_ID(){
+        String strRand="P" ;
+        for(int i=0;i<10;i++){
+            strRand += String.valueOf((int)(Math.random() * 10)) ;
+        }
+        return strRand;
     }
 }
