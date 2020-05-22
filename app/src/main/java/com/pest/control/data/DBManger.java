@@ -31,10 +31,10 @@ public class DBManger {
         this.mContext = mContext;
         mDBHelper = new SQLiteDbHelper(mContext);
         mDataBase = new DataBase();
-        if (SharedPreferenceUtil.getFirstTimeUse(mContext)){
+//        if (SharedPreferenceUtil.getFirstTimeUse(mContext)){
             initDefaultData();
             SharedPreferenceUtil.setFirstTimeUse(false,mContext);
-        }
+//        }
     }
 
 
@@ -199,12 +199,12 @@ public class DBManger {
         }
     }
 
-    //根据条件查询树木病害信息
-    public List<TreeLesion> getTreeLesionsByKey(String key){
-        List<TreeLesion> mTreeLesionInfoList = new ArrayList<>();
+    //获取所有害虫信息
+    public List<Pest> getAllPests(){
+        List<Pest> mPestsInfoList = new ArrayList<>();
         try{
             SQLiteDatabase db = mDBHelper.getWritableDatabase();
-            Cursor cursor = db.rawQuery("SELECT * FROM TreeLesions WHERE PEST_TYPE LIKE '%" + key + "%'", null);
+            Cursor cursor = db.query(SQLiteDbHelper.TAB_PEST,null,null,null,null,null,null);
             while (cursor.moveToNext()){
                 String PEST_ID = cursor.getString(cursor.getColumnIndex("PEST_ID"));
                 String PEST_TYPE = cursor.getString(cursor.getColumnIndex("PEST_TYPE"));
@@ -212,13 +212,68 @@ public class DBManger {
                 String PEST_URL = cursor.getString(cursor.getColumnIndex("PEST_URL"));
                 String PEST_PIC_ID = cursor.getString(cursor.getColumnIndex("PEST_PIC_ID"));
 
-                TreeLesion treeLesion = new TreeLesion();
-                treeLesion.setTREELESION_ID(PEST_ID);
-                treeLesion.setTREELESION_TYPE(PEST_TYPE);
-                treeLesion.setTREELESION_CONTEX(PEST_CONTEX);
-                treeLesion.setTREELESION_PIC_ID(Integer.parseInt(PEST_PIC_ID));
-                treeLesion.setTREELESION_URL(PEST_URL);
+                Pest pest = new Pest();
+                pest.setPEST_ID(PEST_ID);
+                pest.setPEST_TYPE(PEST_TYPE);
+                pest.setPEST_CONTEX(PEST_CONTEX);
+                pest.setPEST_PIC_ID(Integer.parseInt(PEST_PIC_ID));
+                pest.setPEST_URL(PEST_URL);
 
+                mPestsInfoList.add(pest);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return mPestsInfoList;
+    }
+
+    //根据条件查询树木病害信息
+    public List<TreeLesion> getAllTreeLesions(){
+        List<TreeLesion> mTreeLesionInfoList = new ArrayList<>();
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.query(SQLiteDbHelper.TAB_TREELESION,null,null,null,null,null,null);
+            while (cursor.moveToNext()){
+                String TREELESION_ID = cursor.getString(cursor.getColumnIndex("TREELESION_ID"));
+                String TREELESION_TYPE = cursor.getString(cursor.getColumnIndex("TREELESION_TYPE"));
+                String TREELESION_CONTEX = cursor.getString(cursor.getColumnIndex("TREELESION_CONTEX"));
+                String TREELESION_URL = cursor.getString(cursor.getColumnIndex("TREELESION_URL"));
+                String TREELESION_PIC_ID = cursor.getString(cursor.getColumnIndex("TREELESION_PIC_ID"));
+
+                TreeLesion treeLesion = new TreeLesion();
+                treeLesion.setTREELESION_ID(TREELESION_ID);
+                treeLesion.setTREELESION_TYPE(TREELESION_TYPE);
+                treeLesion.setTREELESION_CONTEX(TREELESION_CONTEX);
+                treeLesion.setTREELESION_PIC_ID(Integer.parseInt(TREELESION_PIC_ID));
+                treeLesion.setTREELESION_URL(TREELESION_URL);
+
+                mTreeLesionInfoList.add(treeLesion);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return mTreeLesionInfoList;
+    }
+
+    //根据条件查询树木病害信息
+    public List<TreeLesion> getTreeLesionsByKey(String key){
+        List<TreeLesion> mTreeLesionInfoList = new ArrayList<>();
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM TreeLesions WHERE PEST_TYPE LIKE '%" + key + "%'", null);
+            while (cursor.moveToNext()){
+                String TREELESION_ID = cursor.getString(cursor.getColumnIndex("TREELESION_ID"));
+                String TREELESION_TYPE = cursor.getString(cursor.getColumnIndex("TREELESION_TYPE"));
+                String TREELESION_CONTEX = cursor.getString(cursor.getColumnIndex("TREELESION_CONTEX"));
+                String TREELESION_URL = cursor.getString(cursor.getColumnIndex("TREELESION_URL"));
+                String TREELESION_PIC_ID = cursor.getString(cursor.getColumnIndex("TREELESION_PIC_ID"));
+
+                TreeLesion treeLesion = new TreeLesion();
+                treeLesion.setTREELESION_ID(TREELESION_ID);
+                treeLesion.setTREELESION_TYPE(TREELESION_TYPE);
+                treeLesion.setTREELESION_CONTEX(TREELESION_CONTEX);
+                treeLesion.setTREELESION_PIC_ID(Integer.parseInt(TREELESION_PIC_ID));
+                treeLesion.setTREELESION_URL(TREELESION_URL);
                 mTreeLesionInfoList.add(treeLesion);
             }
         }catch (Exception e){
@@ -275,13 +330,13 @@ public class DBManger {
     public void initDefaultData(){
         List<TreeLesion> mTreeLesionInfoList = mDataBase.mTreeLesionInfoList;
         for (int i =0;i<mTreeLesionInfoList.size();i++){
-            TreeLesion treeLesion = new TreeLesion();
+            TreeLesion treeLesion = mTreeLesionInfoList.get(i);
             insertTreeLesion(treeLesion);
         }
 
         List<Pest> mPestInfoList = mDataBase.mPestInfoList;
         for (int i =0;i<mPestInfoList.size();i++){
-            Pest pest = new Pest();
+            Pest pest = mPestInfoList.get(i);
             insertPest(pest);
         }
     }

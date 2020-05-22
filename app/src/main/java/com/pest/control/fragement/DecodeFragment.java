@@ -83,6 +83,13 @@ public class DecodeFragment extends Fragment {
             }
         });
 
+        mTakePicBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePhoto();
+            }
+        });
+
         mDecodeUtil = new DecodeUtil();
         mDecodeUtil.setListener(new DecodeUtil.IDecodeListener() {
             @Override
@@ -111,26 +118,33 @@ public class DecodeFragment extends Fragment {
             switch (requestCode) {
                 case 1: //从相册图片后返回的uri
                     //启动裁剪
-                    startActivityForResult(CutForPhoto(data.getData()),2);
+                    Uri uri= data.getData();
+                    startActivityForResult(CutForPhoto(uri),2);
                     break;
                 case 2:
+                    Bitmap bm1 = null;
                     try {
-                        //获取裁剪后的图片，并显示出来
-                        Bitmap bitmap = BitmapFactory.decodeStream(
+                        bm1 = BitmapFactory.decodeStream(
                                 getContext().getContentResolver().openInputStream(mCutUri));
-                        mSelectImg.setImageBitmap(bitmap);
-                        mDecodeUtil.decode(bitmap);
+                        if (bm1!=null){
+                            mSelectImg.setImageBitmap(bm1);
+                            mDecodeUtil.decode(bm1);
+                        }
                     } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                     break;
                 case REQUEST_TAKE_PHOTO_CODE:
                     Bitmap bm = null;
                     try {
-                        BitmapFactory.decodeStream(
+                        bm = BitmapFactory.decodeStream(
                                 getContext().getContentResolver().openInputStream(mCutUri));
-                        mSelectImg.setImageBitmap(bm);
-                        mDecodeUtil.decode(bm);
+                        if (bm!=null){
+                            mSelectImg.setImageBitmap(bm);
+                            mDecodeUtil.decode(bm);
+                        }
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
@@ -152,8 +166,8 @@ public class DecodeFragment extends Fragment {
             //直接裁剪
             Intent intent = new Intent("com.android.camera.action.CROP");
             //设置裁剪之后的图片路径文件
-            File cutfile = new File(Environment.getExternalStorageDirectory().getPath(),
-                    "cutcamera.png"); //随便命名一个
+            String path = getContext().getFilesDir() + File.separator + "images" + File.separator;
+            File cutfile = new File(path, "test.jpg");
             if (cutfile.exists()){ //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
                 cutfile.delete();
             }
@@ -161,8 +175,15 @@ public class DecodeFragment extends Fragment {
             //初始化 uri
             Uri imageUri = uri; //返回来的 uri
             Uri outputUri = null; //真实的 uri
-            outputUri = Uri.fromFile(cutfile);
-            mCutUri = outputUri;
+            outputUri =  Uri.fromFile(cutfile);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                //步骤二：Android 7.0及以上获取文件 Uri
+                mCutUri= FileProvider.getUriForFile(getActivity(), "com.pest.control", cutfile);
+            } else {
+                //步骤三：获取文件Uri
+                mCutUri = Uri.fromFile(cutfile);
+            }
+//            mCutUri = outputUri;
             // crop为true是设置在开启的intent中设置显示的view可以剪裁
             intent.putExtra("crop",true);
             // aspectX,aspectY 是宽高的比例，这里设置正方形

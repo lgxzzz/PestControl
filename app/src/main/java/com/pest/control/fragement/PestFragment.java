@@ -95,7 +95,12 @@ public class PestFragment extends Fragment {
     //根据查询条件查询
     public void searchData(){
         String value = mPestSearchEd.getEditableText().toString();
-        pestInfos = DBManger.getInstance(getContext()).getPestsByKey(value);
+        if (value.length()==0){
+            pestInfos = DBManger.getInstance(getContext()).getAllPests();
+        }else{
+            pestInfos = DBManger.getInstance(getContext()).getPestsByKey(value);
+        }
+
         if (pestInfos.size()>0){
             mAdapter.setData(pestInfos);
         }

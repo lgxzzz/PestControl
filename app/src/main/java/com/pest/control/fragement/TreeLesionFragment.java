@@ -87,16 +87,19 @@ public class TreeLesionFragment extends Fragment {
     };
 
     public void initData() {
-        treeLesions = DBManger.getInstance(getContext()).getTreeLesionsByKey("");
+        treeLesions = DBManger.getInstance(getContext()).getAllTreeLesions();
         mAdapter = new TreeLesionInfoAdapter(getContext(),treeLesions);
         mMsgListview.setAdapter(mAdapter);
-
     }
 
     //根据查询条件查询
     public void searchData(){
         String value = mTreeLesionSearchEd.getEditableText().toString();
-        treeLesions = DBManger.getInstance(getContext()).getTreeLesionsByKey(value);
+        if (value.length()==0){
+            treeLesions = DBManger.getInstance(getContext()).getAllTreeLesions();
+        }else{
+            treeLesions = DBManger.getInstance(getContext()).getTreeLesionsByKey(value);
+        }
         if (treeLesions.size()>0){
             mAdapter.setData(treeLesions);
         }

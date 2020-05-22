@@ -77,13 +77,14 @@ public class MainActivity extends BaseActivtiy {
                 if(permission!= PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this,new String[]
                             {Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                    Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    Manifest.permission.CAMERA,
+                                    Manifest.permission.WRITE_SETTINGS,Manifest.permission.READ_EXTERNAL_STORAGE,
                                     },0x0010);
                 }
 
                 if(permission != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this,new String[] {
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_SETTINGS,Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.CAMERA,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE},0x0010);
                 }
