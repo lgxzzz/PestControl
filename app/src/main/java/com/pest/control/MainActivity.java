@@ -1,8 +1,13 @@
 package com.pest.control;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
@@ -10,7 +15,7 @@ import android.view.WindowManager;
 import com.pest.control.bean.User;
 import com.pest.control.data.DBManger;
 import com.pest.control.fragement.DecodeFragment;
-import com.pest.control.fragement.InfoFragment;
+import com.pest.control.fragement.TreeLesionFragment;
 import com.pest.control.fragement.PestFragment;
 import com.pest.control.util.FragmentUtils;
 
@@ -25,9 +30,12 @@ public class MainActivity extends BaseActivtiy {
         Window win = getWindow ();
         WindowManager.LayoutParams params = win.getAttributes ();
         win.setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-
+        requestPermissions();
         setContentView(R.layout.activity_main);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+        }
         init();
 
     }
@@ -54,7 +62,7 @@ public class MainActivity extends BaseActivtiy {
     private void showFragment(int menu_id) {
         switch (menu_id){
             case R.id.bottom_menu_info:
-                FragmentUtils.replaceFragmentToActivity(fragmentManager, InfoFragment.getInstance(),R.id.main_frame);
+                FragmentUtils.replaceFragmentToActivity(fragmentManager, TreeLesionFragment.getInstance(),R.id.main_frame);
                 break;
             case R.id.bottom_menu_decode:
                 FragmentUtils.replaceFragmentToActivity(fragmentManager, DecodeFragment.getInstance(),R.id.main_frame);
@@ -65,4 +73,28 @@ public class MainActivity extends BaseActivtiy {
         }
     }
 
+    private void requestPermissions(){
+        try {
+            if (Build.VERSION.SDK_INT >= 23) {
+                int permission = ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA);
+                if(permission!= PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,new String[]
+                            {Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    Manifest.permission.CAMERA,
+                                    Manifest.permission.WRITE_SETTINGS,Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    },0x0010);
+                }
+
+                if(permission != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,new String[] {
+                            Manifest.permission.WRITE_SETTINGS,Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.CAMERA,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE},0x0010);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

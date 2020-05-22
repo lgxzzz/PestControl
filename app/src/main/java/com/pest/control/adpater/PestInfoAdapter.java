@@ -11,19 +11,24 @@ import android.widget.TextView;
 
 import com.pest.control.R;
 import com.pest.control.WebViewActivity;
-import com.pest.control.bean.MsgInfo;
+import com.pest.control.bean.Pest;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MsgInfoAdapter extends BaseAdapter {
+public class PestInfoAdapter extends BaseAdapter {
 
     Context mContext;
-    List<MsgInfo> mMsgInfos = new ArrayList<>();
+    List<Pest> mMsgInfos = new ArrayList<>();
 
-    public MsgInfoAdapter(Context mContext, List<MsgInfo> mMsgInfos){
+    public PestInfoAdapter(Context mContext, List<Pest> mMsgInfos){
         this.mContext = mContext;
         this.mMsgInfos = mMsgInfos;
+    }
+
+    public void setData(List<Pest> mMsgInfos){
+        this.mMsgInfos = mMsgInfos;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -43,27 +48,27 @@ public class MsgInfoAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        final MsgInfo msgInfo = mMsgInfos.get(i);
-        MsgInfoAdapter.ViewHoler holer = null;
+        final Pest msgInfo = mMsgInfos.get(i);
+        PestInfoAdapter.ViewHoler holer = null;
         if (view == null){
-            holer = new MsgInfoAdapter.ViewHoler();
+            holer = new PestInfoAdapter.ViewHoler();
             view = LayoutInflater.from(mContext).inflate(R.layout.msg_item,null);
             holer.mPic = (ImageView) view.findViewById(R.id.msg_pic);
             holer.mTitle = (TextView) view.findViewById(R.id.msg_title);
             holer.mContent = (TextView) view.findViewById(R.id.msg_content);
             view.setTag(holer);
         }else{
-            holer = (MsgInfoAdapter.ViewHoler) view.getTag();
+            holer = (PestInfoAdapter.ViewHoler) view.getTag();
         }
-        holer.mPic.setBackgroundResource(msgInfo.getmPicId());
-        holer.mTitle.setText(msgInfo.getTitle());
-        holer.mContent.setText(msgInfo.getContent());
+        holer.mPic.setBackgroundResource(msgInfo.getPEST_PIC_ID());
+        holer.mTitle.setText(msgInfo.getPEST_TYPE());
+        holer.mContent.setText(msgInfo.getPEST_CONTEX());
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(mContext,WebViewActivity.class);
-                intent.putExtra("url",msgInfo.getUrl());
+                intent.putExtra("url",msgInfo.getPEST_URL());
                 mContext.startActivity(intent);
             }
         });

@@ -13,37 +13,38 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+
 import com.pest.control.R;
-import com.pest.control.adpater.PestInfoAdapter;
 import com.pest.control.adpater.TreeLesionInfoAdapter;
-import com.pest.control.bean.Pest;
+import com.pest.control.bean.TreeLesion;
 import com.pest.control.data.DBManger;
 
 import java.util.ArrayList;
 import java.util.List;
 
+public class TreeLesionFragment extends Fragment {
 
-public class PestFragment extends Fragment {
-    List<Pest> pestInfos = new ArrayList<>();
+
+    List<TreeLesion> treeLesions = new ArrayList<>();
 
     ListView mMsgListview;
 
-    PestInfoAdapter mAdapter;
+    TreeLesionInfoAdapter mAdapter;
 
-    EditText mPestSearchEd;
+    EditText mTreeLesionSearchEd;
 
-    Button mPestSearchClearBtn;
+    Button mTreeLesionSearchClearBtn;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragement_pest, container, false);
+        View view =  inflater.inflate(R.layout.fragement_treelesion, container, false);
         initView(view);
 
         return view;
     }
 
-    public static PestFragment getInstance() {
-        return new PestFragment();
+    public static TreeLesionFragment getInstance() {
+        return new TreeLesionFragment();
     }
 
     @Override
@@ -55,19 +56,19 @@ public class PestFragment extends Fragment {
     public void initView(View view){
         mMsgListview = view.findViewById(R.id.search_info_list);
 
-        mPestSearchEd = view.findViewById(R.id.pest_search_ed);
+        mTreeLesionSearchEd = view.findViewById(R.id.treelesion_search_ed);
 
-        mPestSearchClearBtn = view.findViewById(R.id.pest_search_clear_btn);
+        mTreeLesionSearchClearBtn = view.findViewById(R.id.treelesion_search_clear_btn);
 
-        mPestSearchClearBtn.setOnClickListener(new View.OnClickListener() {
+        mTreeLesionSearchClearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPestSearchEd.setText("");
+                mTreeLesionSearchEd.setText("");
                 searchData();
             }
         });
 
-        mPestSearchEd.addTextChangedListener(new TextWatcher() {
+        mTreeLesionSearchEd.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -86,26 +87,21 @@ public class PestFragment extends Fragment {
     };
 
     public void initData() {
-        pestInfos = DBManger.getInstance(getContext()).getPestsByKey("");
-        mAdapter = new PestInfoAdapter(getContext(),pestInfos);
+        treeLesions = DBManger.getInstance(getContext()).getAllTreeLesions();
+        mAdapter = new TreeLesionInfoAdapter(getContext(),treeLesions);
         mMsgListview.setAdapter(mAdapter);
-
     }
 
     //根据查询条件查询
     public void searchData(){
-        String value = mPestSearchEd.getEditableText().toString();
+        String value = mTreeLesionSearchEd.getEditableText().toString();
         if (value.length()==0){
-            pestInfos = DBManger.getInstance(getContext()).getAllPests();
+            treeLesions = DBManger.getInstance(getContext()).getAllTreeLesions();
         }else{
-            pestInfos = DBManger.getInstance(getContext()).getPestsByKey(value);
+            treeLesions = DBManger.getInstance(getContext()).getTreeLesionsByKey(value);
         }
-
-        if (pestInfos.size()>0){
-            mAdapter.setData(pestInfos);
+        if (treeLesions.size()>0){
+            mAdapter.setData(treeLesions);
         }
     }
-
-
-
 }
