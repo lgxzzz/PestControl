@@ -155,6 +155,40 @@ public class DecodeFragment extends Fragment {
         }
     }
 
+    private Intent startPhotoZoom(Uri uri) {
+        File CropPhoto = new File(getActivity().getExternalCacheDir(), "Crop.jpg");//这个是创建一个截取后的图片路径和名称。
+        try {
+            if (CropPhoto.exists()) {
+                CropPhoto.delete();
+            }
+            CropPhoto.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Uri ImageUri = Uri.fromFile(CropPhoto);
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
+        }
+        intent.putExtra("crop", "true");
+        intent.putExtra("scale", true);
+
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+
+        //输出的宽高
+
+        intent.putExtra("outputX", 300);
+        intent.putExtra("outputY", 300);
+
+        intent.putExtra("return-data", false);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, ImageUri);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("noFaceDetection", true); // no face detection
+        return intent;
+    }
+
     /**
      * 图片裁剪
      * @param uri
