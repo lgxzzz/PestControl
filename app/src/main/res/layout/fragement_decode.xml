@@ -13,11 +13,16 @@
         android:layout_width="400dp"
         android:layout_height="400dp"
         android:id="@+id/select_pic_img"
+
+        android:layout_marginTop="40dp"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/decode_res_tv"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="@android:color/black"
         ></TextView>
     <LinearLayout
         android:layout_width="match_parent"

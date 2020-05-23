@@ -10,9 +10,9 @@ import com.pest.control.util.SharedPreferenceUtil;
 public class SQLiteDbHelper extends SQLiteOpenHelper {
 
     //数据库名称
-    public static final String DB_NAME = "StoreSelection.db";
+    public static final String DB_NAME = "PestControl.db";
     //数据库版本号
-    public static int DB_VERSION = 40;
+    public static int DB_VERSION = 41;
     //用户表
     public static final String TAB_USER = "UserInfo";
     //树木病害表

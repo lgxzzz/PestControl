@@ -31,10 +31,10 @@ public class DBManger {
         this.mContext = mContext;
         mDBHelper = new SQLiteDbHelper(mContext);
         mDataBase = new DataBase();
-//        if (SharedPreferenceUtil.getFirstTimeUse(mContext)){
+        if (SharedPreferenceUtil.getFirstTimeUse(mContext)){
             initDefaultData();
             SharedPreferenceUtil.setFirstTimeUse(false,mContext);
-//        }
+        }
     }
 
 
@@ -260,7 +260,7 @@ public class DBManger {
         List<TreeLesion> mTreeLesionInfoList = new ArrayList<>();
         try{
             SQLiteDatabase db = mDBHelper.getWritableDatabase();
-            Cursor cursor = db.rawQuery("SELECT * FROM TreeLesions WHERE PEST_TYPE LIKE '%" + key + "%'", null);
+            Cursor cursor = db.rawQuery("SELECT * FROM TreeLesions WHERE TREELESION_TYPE LIKE '%" + key + "%'", null);
             while (cursor.moveToNext()){
                 String TREELESION_ID = cursor.getString(cursor.getColumnIndex("TREELESION_ID"));
                 String TREELESION_TYPE = cursor.getString(cursor.getColumnIndex("TREELESION_TYPE"));
